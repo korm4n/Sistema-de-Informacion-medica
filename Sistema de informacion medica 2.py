@@ -117,8 +117,8 @@ class MainWindow(QMainWindow):
         # Hospital name label
         hospital_name_layout = QHBoxLayout()
         hospital_name_layout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum))
-        self.hospital_name_label_inicio = QLabel("Hospital XYZ")
-        self.hospital_name_label_inicio.setStyleSheet("font-size: 64px; color: blue;")
+        self.hospital_name_label_inicio = QLabel("Ambulatorio Rural Tipo III Carmen Isidra Bracho")
+        self.hospital_name_label_inicio.setStyleSheet("font-size: 40px; color: Blue;")
         hospital_name_layout.addWidget(self.hospital_name_label_inicio)
         hospital_name_layout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum))
         layout.addLayout(hospital_name_layout)
