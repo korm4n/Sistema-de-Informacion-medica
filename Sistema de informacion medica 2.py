@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QVBoxLayout, QWidget, QHBoxLayout, QPushButton, QLineEdit, QComboBox, QDateEdit, QListWidget, QMessageBox, QFormLayout, QMenuBar, QToolBar, QSizePolicy, QSpacerItem
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QVBoxLayout, QWidget, QHBoxLayout, QPushButton, QLineEdit, QComboBox, QDateEdit, QListWidget, QMessageBox, QFormLayout, QMenuBar, QToolBar, QSizePolicy, QSpacerItem, QFrame
 from PyQt5.QtGui import QIntValidator, QRegExpValidator, QIcon
 from PyQt5.QtCore import QDate, QRegExp, Qt, QSize
 from datetime import datetime
@@ -66,7 +66,8 @@ class MainWindow(QMainWindow):
                 height: 64px;  /* Altura del icono */
             }
             QPushButton:hover {
-                background-color: #d0d0d0;  /* Color de fondo al pasar el mouse */
+                background-color:rgb(20, 19, 19);  /* Color de fondo al pasar el mouse */
+                color: white;  /* Color del texto al pasar el mouse */
             }
         """
 
@@ -77,7 +78,18 @@ class MainWindow(QMainWindow):
             button.clicked.connect(lambda checked, key=key: self.show_frame(key))
             button_layout.addWidget(button)
 
-        content_layout.addLayout(button_layout)
+        # Create a frame for buttons with black background
+        button_frame = QFrame()
+        button_frame.setStyleSheet("background-color: black;")
+        button_frame.setLayout(button_layout)
+
+        content_layout.addWidget(button_frame)
+
+        # Add a vertical line separator
+        separator = QFrame()
+        separator.setFrameShape(QFrame.VLine)
+        separator.setFrameShadow(QFrame.Sunken)
+        content_layout.addWidget(separator)
 
         # Right side frames
         self.frames = {
@@ -143,6 +155,7 @@ class MainWindow(QMainWindow):
         self.birthdate_entry_medico = QDateEdit()
         layout.addRow(QLabel("Fecha de Nacimiento:"), self.birthdate_entry_medico)
         self.birthdate_entry_medico.setCalendarPopup(True)
+        self.birthdate_entry_medico.dateChanged.connect(self.update_age_medico)  # Conectar la señal dateChanged
         self.age_label_medico = QLabel("")
         layout.addRow(QLabel("Edad:"), self.age_label_medico)
         self.genero_combobox_medico = QComboBox()
@@ -150,9 +163,6 @@ class MainWindow(QMainWindow):
         self.genero_combobox_medico.addItems(["Masculino", "Femenino"])
         self.especialidad_entry_medico = QLineEdit()
         layout.addRow(QLabel("Especialidad:"), self.especialidad_entry_medico)
-        self.calculate_age_button_medico = QPushButton("Calcular Edad")
-        self.calculate_age_button_medico.clicked.connect(self.update_age_medico)
-        layout.addRow(self.calculate_age_button_medico)
         self.save_button_medico = QPushButton("Guardar")
         self.save_button_medico.clicked.connect(self.save_medico)
         layout.addRow(self.save_button_medico)
@@ -207,11 +217,13 @@ class MainWindow(QMainWindow):
         self.birthdate_entry_paciente = QDateEdit()
         layout.addRow(QLabel("Fecha de Nacimiento:"), self.birthdate_entry_paciente)
         self.birthdate_entry_paciente.setCalendarPopup(True)
+        self.birthdate_entry_paciente.dateChanged.connect(self.update_age_paciente)  # Conectar la señal dateChanged
         self.age_label_paciente = QLabel("")
         layout.addRow(QLabel("Edad:"), self.age_label_paciente)
         self.genero_combobox_paciente = QComboBox()
         layout.addRow(QLabel("Género:"), self.genero_combobox_paciente)
         self.genero_combobox_paciente.addItems(["Masculino", "Femenino"])
+        self.genero_combobox_paciente.currentTextChanged.connect(self.toggle_embarazo_fields)  # Conectar la señal currentTextChanged
         self.estado_civil_combobox_paciente = QComboBox()
         layout.addRow(QLabel("Estado Civil:"), self.estado_civil_combobox_paciente)
         self.estado_civil_combobox_paciente.addItems(["Soltero", "Casado", "Divorciado", "Viudo"])
@@ -221,9 +233,17 @@ class MainWindow(QMainWindow):
         layout.addRow(QLabel("Dirección de Habitación:"), self.direccion_entry_paciente)
         self.diagnostico_entry_paciente = QLineEdit()
         layout.addRow(QLabel("Diagnóstico:"), self.diagnostico_entry_paciente)
-        self.calculate_age_button_paciente = QPushButton("Calcular Edad")
-        self.calculate_age_button_paciente.clicked.connect(self.update_age_paciente)
-        layout.addRow(self.calculate_age_button_paciente)
+        
+        # Embarazo fields
+        self.embarazada_combobox_paciente = QComboBox()
+        self.embarazada_combobox_paciente.addItems(["No", "Sí"])
+        self.embarazada_combobox_paciente.currentTextChanged.connect(self.toggle_semanas_field)
+        layout.addRow(QLabel("¿Está embarazada?"), self.embarazada_combobox_paciente)
+        self.semanas_entry_paciente = QLineEdit()
+        self.semanas_entry_paciente.setValidator(QIntValidator())
+        layout.addRow(QLabel("Cantidad de semanas:"), self.semanas_entry_paciente)
+        self.semanas_entry_paciente.setVisible(False)  # Ocultar por defecto
+
         self.save_button_paciente = QPushButton("Guardar")
         self.save_button_paciente.clicked.connect(self.save_paciente)
         layout.addRow(self.save_button_paciente)
@@ -232,6 +252,19 @@ class MainWindow(QMainWindow):
         layout.addRow(self.clear_button_paciente)
         frame.setLayout(layout)
         return frame
+
+    def toggle_embarazo_fields(self):
+        if self.genero_combobox_paciente.currentText() == "Femenino":
+            self.embarazada_combobox_paciente.setVisible(True)
+        else:
+            self.embarazada_combobox_paciente.setVisible(False)
+            self.semanas_entry_paciente.setVisible(False)
+
+    def toggle_semanas_field(self):
+        if self.embarazada_combobox_paciente.currentText() == "Sí":
+            self.semanas_entry_paciente.setVisible(True)
+        else:
+            self.semanas_entry_paciente.setVisible(False)
 
     def update_age_paciente(self):
         birthdate = self.birthdate_entry_paciente.date().toPyDate()
@@ -249,6 +282,8 @@ class MainWindow(QMainWindow):
         direccion = self.direccion_entry_paciente.text()
         diagnostico = self.diagnostico_entry_paciente.text()
         age = self.age_label_paciente.text()
+        embarazada = self.embarazada_combobox_paciente.currentText()
+        semanas = self.semanas_entry_paciente.text() if embarazada == "Sí" else ""
 
         if not cedula or not nombres or not apellidos or not lugar_nacimiento or not direccion or not diagnostico:
             QMessageBox.warning(self, "Error", "Todos los campos son obligatorios.")
@@ -268,6 +303,9 @@ class MainWindow(QMainWindow):
         self.lugar_nacimiento_entry_paciente.clear()
         self.direccion_entry_paciente.clear()
         self.diagnostico_entry_paciente.clear()
+        self.embarazada_combobox_paciente.setCurrentIndex(0)
+        self.semanas_entry_paciente.clear()
+        self.semanas_entry_paciente.setVisible(False)
 
     def create_historia_medica_frame(self):
         frame = QWidget()
@@ -329,7 +367,31 @@ class MainWindow(QMainWindow):
 
         # Ejemplo de actualización de la lista de resultados
         self.consultas_list.clear()
-        self.consultas_list.addItem(f"Resultados para Sexo: {sexo}, Edad: {edad}, Dirección: {direccion}, Tipo de Enfermedad: {tipo_enfermedad}, Embarazadas: {embarazadas}")
+
+        # Filtrar resultados según los criterios especificados
+        results = self.filter_consultas(sexo, edad, direccion, tipo_enfermedad, embarazadas)
+        for result in results:
+            self.consultas_list.addItem(result)
+
+    def filter_consultas(self, sexo, edad, direccion, tipo_enfermedad, embarazadas):
+        # Aquí puedes agregar la lógica para filtrar los resultados de la base de datos
+        # Este es un ejemplo de cómo podrías hacerlo con datos ficticios
+        all_consultas = [
+            {"sexo": "Masculino", "edad": "30", "direccion": "Calle 1", "tipo_enfermedad": "Gripe", "embarazadas": "No"},
+            {"sexo": "Femenino", "edad": "25", "direccion": "Calle 2", "tipo_enfermedad": "Covid-19", "embarazadas": "Sí"},
+            # Agrega más datos ficticios aquí
+        ]
+
+        filtered_consultas = []
+        for consulta in all_consultas:
+            if (sexo == consulta["sexo"] or not sexo) and \
+               (edad == consulta["edad"] or not edad) and \
+               (direccion in consulta["direccion"] or not direccion) and \
+               (tipo_enfermedad in consulta["tipo_enfermedad"] or not tipo_enfermedad) and \
+               (embarazadas == consulta["embarazadas"] or not embarazadas):
+                filtered_consultas.append(f"Sexo: {consulta['sexo']}, Edad: {consulta['edad']}, Dirección: {consulta['direccion']}, Tipo de Enfermedad: {consulta['tipo_enfermedad']}, Embarazadas: {consulta['embarazadas']}")
+
+        return filtered_consultas
 
     def create_farmacia_frame(self):
         frame = QWidget()
