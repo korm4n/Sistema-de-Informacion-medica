@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QFormLayout, QHBoxLayout, QLineEdit, QSpacerItem, QSizePolicy, QDateEdit, QComboBox, QPushButton, QMessageBox, QStackedWidget
-from PyQt5.QtGui import QIntValidator, QRegExpValidator
-from PyQt5.QtCore import QDate, QRegExp
+from PySide6.QtWidgets import QWidget, QLabel, QVBoxLayout, QFormLayout, QHBoxLayout, QLineEdit, QSpacerItem, QSizePolicy, QDateEdit, QComboBox, QPushButton, QMessageBox, QStackedWidget
+from PySide6.QtGui import QIntValidator, QRegularExpressionValidator
+from PySide6.QtCore import QDate, QRegularExpression
 
 class MedicosEnfermeras(QWidget):
     def __init__(self):
@@ -25,25 +25,25 @@ class MedicosEnfermeras(QWidget):
         self.cedula_entry_medico = QLineEdit()
         self.cedula_entry_medico.setValidator(QIntValidator(0, 99999999))
         self.cedula_entry_medico.setMaxLength(8)
-        self.cedula_entry_medico.setFixedWidth(100)
+        self.cedula_entry_medico.setFixedWidth(200)
         self.cedula_entry_medico.setStyleSheet("background-color: white;")
         row_layout1.addWidget(QLabel("Cédula:"))
         row_layout1.addSpacerItem(QSpacerItem(1, 0, QSizePolicy.Minimum, QSizePolicy.Minimum))
         row_layout1.addWidget(self.cedula_entry_medico)
         
         self.nombres_entry_medico = QLineEdit()
-        self.nombres_entry_medico.setValidator(QRegExpValidator(QRegExp("[A-Za-z ]{1,50}")))
+        self.nombres_entry_medico.setValidator(QRegularExpressionValidator(QRegularExpression("[A-Za-z ]{1,50}")))
         self.nombres_entry_medico.setMaxLength(50)
-        self.nombres_entry_medico.setFixedWidth(300)
+        self.nombres_entry_medico.setFixedWidth(200)
         self.nombres_entry_medico.setStyleSheet("background-color: white;")
         row_layout1.addWidget(QLabel("Nombres:"))
         row_layout1.addSpacerItem(QSpacerItem(1, 0, QSizePolicy.Minimum, QSizePolicy.Minimum))
         row_layout1.addWidget(self.nombres_entry_medico)
         
         self.apellidos_entry_medico = QLineEdit()
-        self.apellidos_entry_medico.setValidator(QRegExpValidator(QRegExp("[A-Za-z ]{1,50}")))
+        self.apellidos_entry_medico.setValidator(QRegularExpressionValidator(QRegularExpression("[A-Za-z ]{1,50}")))
         self.apellidos_entry_medico.setMaxLength(50)
-        self.apellidos_entry_medico.setFixedWidth(300)
+        self.apellidos_entry_medico.setFixedWidth(200)
         self.apellidos_entry_medico.setStyleSheet("background-color: white;")
         row_layout1.addWidget(QLabel("Apellidos:"))
         row_layout1.addSpacerItem(QSpacerItem(1, 0, QSizePolicy.Minimum, QSizePolicy.Minimum))
@@ -51,7 +51,7 @@ class MedicosEnfermeras(QWidget):
         
         self.birthdate_entry_medico = QDateEdit()
         self.birthdate_entry_medico.setCalendarPopup(True)
-        self.birthdate_entry_medico.setFixedWidth(120)
+        self.birthdate_entry_medico.setFixedWidth(200)
         self.birthdate_entry_medico.setStyleSheet("""
             QDateEdit {
                 background-color: white;
@@ -96,7 +96,7 @@ class MedicosEnfermeras(QWidget):
         self.telefono_entry_medico = QLineEdit()
         self.telefono_entry_medico.setInputMask("0000-0000000")  # Máscara de entrada para el formato (0000-0000000)
         self.telefono_entry_medico.setMaxLength(15)
-        self.telefono_entry_medico.setFixedWidth(150)
+        self.telefono_entry_medico.setFixedWidth(50)
         self.telefono_entry_medico.setStyleSheet("background-color: white;")
         self.telefono_entry_medico.setCursorPosition(0)  # Posicionar el cursor al inicio
         row_layout2.addWidget(QLabel("Teléfono:"))
@@ -105,7 +105,7 @@ class MedicosEnfermeras(QWidget):
 
         self.genero_combobox_medico = QComboBox()
         self.genero_combobox_medico.addItems(["Masculino", "Femenino"])
-        self.genero_combobox_medico.setFixedWidth(100)
+        self.genero_combobox_medico.setFixedWidth(50)
         self.genero_combobox_medico.setStyleSheet("background-color: white;")
         row_layout2.addWidget(QLabel("Género:"))
         row_layout2.addSpacerItem(QSpacerItem(20, 0, QSizePolicy.Minimum, QSizePolicy.Minimum))
@@ -113,16 +113,16 @@ class MedicosEnfermeras(QWidget):
 
         self.estado_civil_combobox_medico = QComboBox()
         self.estado_civil_combobox_medico.addItems(["Soltero", "Casado", "Viudo", "Divorciado"])
-        self.estado_civil_combobox_medico.setFixedWidth(100)
+        self.estado_civil_combobox_medico.setFixedWidth(50)
         self.estado_civil_combobox_medico.setStyleSheet("background-color: white;")
         row_layout2.addWidget(QLabel("Estado Civil:"))
         row_layout2.addSpacerItem(QSpacerItem(20, 0, QSizePolicy.Minimum, QSizePolicy.Minimum))
         row_layout2.addWidget(self.estado_civil_combobox_medico)
 
         self.lugar_nacimiento_entry_medico = QLineEdit()
-        self.lugar_nacimiento_entry_medico.setValidator(QRegExpValidator(QRegExp("[A-Za-z ]{1,50}")))
+        self.lugar_nacimiento_entry_medico.setValidator(QRegularExpressionValidator(QRegularExpression("[A-Za-z ]{1,50}")))
         self.lugar_nacimiento_entry_medico.setMaxLength(50)
-        self.lugar_nacimiento_entry_medico.setFixedWidth(300)
+        self.lugar_nacimiento_entry_medico.setFixedWidth(50)
         self.lugar_nacimiento_entry_medico.setStyleSheet("background-color: white;")
         row_layout2.addWidget(QLabel("Lugar de Nacimiento:"))
         row_layout2.addSpacerItem(QSpacerItem(20, 0, QSizePolicy.Minimum, QSizePolicy.Minimum))
@@ -133,17 +133,17 @@ class MedicosEnfermeras(QWidget):
         # Agrupar dirección y número de registro médico en una fila
         row_layout3 = QHBoxLayout()
         self.direccion_entry_medico = QLineEdit()
-        self.direccion_entry_medico.setValidator(QRegExpValidator(QRegExp(".{1,500}")))
-        self.direccion_entry_medico.setMaxLength(500)
-        self.direccion_entry_medico.setFixedWidth(500)
+        self.direccion_entry_medico.setValidator(QRegularExpressionValidator(QRegularExpression(".{1,500}")))
+        self.direccion_entry_medico.setMaxLength(200)
+        self.direccion_entry_medico.setFixedWidth(200)
         self.direccion_entry_medico.setStyleSheet("background-color: white;")
         row_layout3.addWidget(QLabel("Dirección:"))
         row_layout3.addWidget(self.direccion_entry_medico)
         
         self.numero_registro_medico_entry = QLineEdit()
-        self.numero_registro_medico_entry.setValidator(QRegExpValidator(QRegExp(".{1,500}")))
-        self.numero_registro_medico_entry.setMaxLength(500)
-        self.numero_registro_medico_entry.setFixedWidth(500)
+        self.numero_registro_medico_entry.setValidator(QRegularExpressionValidator(QRegularExpression(".{1,500}")))
+        self.numero_registro_medico_entry.setMaxLength(20)
+        self.numero_registro_medico_entry.setFixedWidth(20)
         self.numero_registro_medico_entry.setStyleSheet("background-color: white;")
         row_layout3.addWidget(QLabel("Número de Registro Médico:"))
         row_layout3.addWidget(self.numero_registro_medico_entry)
@@ -151,18 +151,22 @@ class MedicosEnfermeras(QWidget):
         layout.addRow(row_layout3)
         
         self.horario_guardia_entry = QLineEdit()
-        self.horario_guardia_entry.setValidator(QRegExpValidator(QRegExp(".{1,500}")))
-        self.horario_guardia_entry.setMaxLength(500)
-        self.horario_guardia_entry.setFixedWidth(400)
+        self.horario_guardia_entry.setValidator(QRegularExpressionValidator(QRegularExpression(".{1,500}")))
+        self.horario_guardia_entry.setMaxLength(30)
+        self.horario_guardia_entry.setFixedWidth(30)
         self.horario_guardia_entry.setStyleSheet("background-color: white;")
         layout.addRow(QLabel("Horario de Guardia:"), self.horario_guardia_entry)
         
         self.save_button_medico = QPushButton("Guardar")
+        self.save_button_medico.setFixedSize(150, 30)  # Establecer tamaño fijo
         self.save_button_medico.clicked.connect(self.save_medico)
         layout.addRow(self.save_button_medico)
+        
         self.clear_button_medico = QPushButton("Limpiar Información")
+        self.clear_button_medico.setFixedSize(150, 30)  # Establecer tamaño fijo
         self.clear_button_medico.clicked.connect(self.clear_medico_form)
         layout.addRow(self.clear_button_medico)
+        
         frame.setLayout(layout)
         return frame
 
@@ -170,12 +174,12 @@ class MedicosEnfermeras(QWidget):
         self.stacked_widget.setCurrentWidget(self.medicos_frame)
     
     def calculate_age(self, birthdate):
-            today = QDate.currentDate().toPyDate()
-            age = self.calculate_age(birthdate)
-            return age
+        today = QDate.currentDate().toPython()
+        age = today.year - birthdate.year - ((today.month, today.day) < (birthdate.month, birthdate.day))
+        return age
 
     def update_age_medico(self):
-        birthdate = self.birthdate_entry_medico.date().toPyDate()
+        birthdate = self.birthdate_entry_medico.date().toPython()
         age = self.calculate_age(birthdate)
         self.age_label_medico.setText(str(age))
 
@@ -183,7 +187,7 @@ class MedicosEnfermeras(QWidget):
         cedula = self.cedula_entry_medico.text()
         nombres = self.nombres_entry_medico.text()
         apellidos = self.apellidos_entry_medico.text()
-        birthdate = self.birthdate_entry_medico.date().toPyDate()
+        birthdate = self.birthdate_entry_medico.date().toPython()
         genero = self.genero_combobox_medico.currentText()
         estado_civil = self.estado_civil_combobox_medico.currentText()
         numero_registro_medico = self.numero_registro_medico_entry.text()

@@ -1,5 +1,5 @@
-from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QFormLayout, QLineEdit, QDateEdit, QPushButton, QMessageBox
-from PyQt5.QtCore import QDate
+from PySide6.QtWidgets import QWidget, QLabel, QVBoxLayout, QFormLayout, QLineEdit, QDateEdit, QPushButton, QMessageBox
+from PySide6.QtCore import QDate
 
 class Farmacia(QWidget):
     def __init__(self):
@@ -47,10 +47,12 @@ class Farmacia(QWidget):
         layout.addRow(QLabel("Cantidades Disponibles:"), self.cantidades_disponibles_entry)
 
         self.save_button_farmacia = QPushButton("Guardar")
+        self.save_button_farmacia.setFixedSize(150, 30)  # Establecer tamaño fijo
         self.save_button_farmacia.clicked.connect(self.save_farmacia)
         layout.addRow(self.save_button_farmacia)
         
         self.clear_button_farmacia = QPushButton("Limpiar Información")
+        self.clear_button_farmacia.setFixedSize(150, 30)  # Establecer tamaño fijo
         self.clear_button_farmacia.clicked.connect(self.clear_farmacia_form)
         layout.addRow(self.clear_button_farmacia)
         
@@ -59,9 +61,9 @@ class Farmacia(QWidget):
 
     def save_farmacia(self):
         nombre_farmaco = self.nombre_farmaco_entry.text()
-        fecha_elaboracion = self.fecha_elaboracion_entry.date().toPyDate()
+        fecha_elaboracion = self.fecha_elaboracion_entry.date().toPython()
         lote = self.lote_entry.text()
-        fecha_caducidad = self.fecha_caducidad_entry.date().toPyDate()
+        fecha_caducidad = self.fecha_caducidad_entry.date().toPython()
         cantidades_recibidas = self.cantidades_recibidas_entry.text()
         cantidades_disponibles = self.cantidades_disponibles_entry.text()
 

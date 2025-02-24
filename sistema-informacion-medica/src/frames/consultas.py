@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QFormLayout, QComboBox, QHBoxLayout, QLineEdit, QPushButton, QListWidget
+from PySide6.QtWidgets import QWidget, QLabel, QVBoxLayout, QFormLayout, QComboBox, QHBoxLayout, QLineEdit, QPushButton, QListWidget
 
 class Consultas(QWidget):
     def __init__(self):
@@ -49,6 +49,7 @@ class Consultas(QWidget):
 
         # Botón de búsqueda
         self.search_button_consultas = QPushButton("Buscar")
+        self.search_button_consultas.setFixedSize(150, 30)  # Establecer tamaño fijo
         self.search_button_consultas.clicked.connect(self.search_consultas)
         layout.addRow(self.search_button_consultas)
 

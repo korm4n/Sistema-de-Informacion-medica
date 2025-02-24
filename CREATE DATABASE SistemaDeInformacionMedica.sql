@@ -1,6 +1,10 @@
-CREATE DATABASE SistemaDeInformacionMedica;
+delete DATABASE SistemadeInformacionMedica
 
-USE SistemaDeInformacionMedica;
+CREATE DATABASE SistemaInformacionMedica
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_general_ci;
+
+USE SistemaInformacionMedica;
 
 CREATE TABLE Hospital (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -9,7 +13,7 @@ CREATE TABLE Hospital (
     telefono VARCHAR(20) NOT NULL,
     tipo VARCHAR(50) NOT NULL,
     zona VARCHAR(50) NOT NULL
-);
+) ENGINE=InnoDB;
 
 CREATE TABLE Medico (
     cedula VARCHAR(20) PRIMARY KEY,
@@ -22,7 +26,7 @@ CREATE TABLE Medico (
     estado_civil ENUM('Soltero', 'Casado', 'Viudo', 'Divorciado') NOT NULL,
     numero_registro_medico VARCHAR(50) NOT NULL,
     horario_guardia TEXT NOT NULL
-);
+) ENGINE=InnoDB;
 
 CREATE TABLE Paciente (
     cedula VARCHAR(20) PRIMARY KEY,
@@ -46,4 +50,4 @@ CREATE TABLE Paciente (
     estado_actual ENUM('Mejora', 'Muerte') NOT NULL,
     fecha_alta DATE,
     hora_alta TIME
-);
+) ENGINE=InnoDB;

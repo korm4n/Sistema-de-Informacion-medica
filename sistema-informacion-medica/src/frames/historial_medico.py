@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QLabel, QVBoxLayout, QListWidget, QPushButton, QStackedLayout
+from PySide6.QtWidgets import QWidget, QLabel, QVBoxLayout, QListWidget, QPushButton, QStackedLayout
 
 class HistorialMedico(QWidget):
     def __init__(self):

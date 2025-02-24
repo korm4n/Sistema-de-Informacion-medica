@@ -1,13 +1,11 @@
 import mysql.connector
 from mysql.connector import Error
 import time
-from frames.db_config import DB_USER, DB_PASSWORD
-from creadorbasededatos import CrearBaseDatos  # Importa la clase para crear la base de datos
 
 class CreateConnection:
     def __init__(self):
-        self.usuario = DB_USER
-        self.contrasena = DB_PASSWORD
+        self.usuario = 'SIMV'
+        self.contrasena = 'TAcuato+-14'
 
     def create_connection(self):
         """Create a database connection to the MySQL database"""
@@ -20,23 +18,8 @@ class CreateConnection:
              )
             if connection.is_connected():
                return connection
-        except Error as e:
-            if "Unknown database" in str(e):
-                # Si la base de datos no existe, intenta crearla
-                creador = CrearBaseDatos()
-                creador.crear_base_datos()
-                # Intenta conectarse de nuevo
-                try:
-                    connection = mysql.connector.connect(
-                        host='localhost',
-                        database='sistema_informacion_medica',
-                        user=self.usuario,
-                        password=self.contrasena
-                    )
-                    if connection.is_connected():
-                        return connection
-                except Error:
-                    pass
+        except Error:
+            pass
         except Exception:
             pass
         return None
