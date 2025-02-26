@@ -47,7 +47,7 @@ class Ventana(QMainWindow):
         self.status_label = QLabel("", self)
         self.status_bar.addPermanentWidget(self.status_label)
         
-        self.setFixedSize(980, 600)  # Establecer un tamaño fijo para la ventana
+        self.resize(800, 600)  # Iniciar en pantalla completa
 
         self.menu_bar = self.menuBar()
 
@@ -97,17 +97,12 @@ class Ventana(QMainWindow):
         for nombre, icono in zip(botones, iconos):
             boton = QPushButton(nombre)
             boton.setIcon(QIcon(icono))  # Establecer el icono del botón
-            boton.setFixedWidth(boton.sizeHint().width())  # Ajustar la longitud del botón al texto
-            max_width = max(max_width, boton.sizeHint().width())  # Encontrar el ancho máximo
+            boton.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)  # Permitir que el ancho se ajuste al contenido
             boton.setCheckable(True)  # Hacer el botón checkable
             boton.clicked.connect(lambda checked, n=nombre: self.cambiar_frame(n.replace("<br>", " ")))
             boton.clicked.connect(self.actualizar_botones)  # Conectar la señal para actualizar el estado de los botones
             botones_layout.addWidget(boton)
             self.buttons[nombre] = boton
-
-        # Ajustar todos los botones al ancho máximo
-        for boton in self.buttons.values():
-            boton.setFixedWidth(max_width)
 
         # Aplicar estilos a los botones
         button_style = """
@@ -133,7 +128,6 @@ class Ventana(QMainWindow):
         for key, button in self.buttons.items():
             button.setIconSize(QSize(24, 24))  # Establecer tamaño del icono
             button.setFixedHeight(40)  # Establecer altura fija para los botones
-            button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)  # Permitir que el ancho se ajuste al contenido
             button.setStyleSheet(button_style)
 
         # Crear un widget para contener el layout de los botones
@@ -147,6 +141,7 @@ class Ventana(QMainWindow):
 
         # Crear un QStackedWidget para cambiar entre los frames
         self.stacked_widget = QStackedWidget()
+        self.stacked_widget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)  # Permitir que el QStackedWidget se expanda
 
         # Agregar los frames al QStackedWidget
         self.frames = {
@@ -159,6 +154,7 @@ class Ventana(QMainWindow):
             "Configuración": Configuracion(),
         }
         for frame in self.frames.values():
+            frame.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)  # Permitir que los frames se expandan
             self.stacked_widget.addWidget(frame)
 
         # Agregar el QStackedWidget al layout de contenido
@@ -214,11 +210,14 @@ class Ventana(QMainWindow):
         else:
             event.ignore()
 
-def mostrar_resultado():
-    app = QApplication(sys.argv)
-    ventana = Ventana()
-    ventana.show()
-    sys.exit(app.exec())
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Escape:
+            self.close()
 
 if __name__ == "__main__":
-    mostrar_resultado()
+    app = QApplication(sys.argv)
+    ventana = Ventana()
+    ventana.show()  # Iniciar en pantalla completa
+    sys.exit(app.exec())
+
+

@@ -14,11 +14,44 @@ class Pacientes(QWidget):
         super().__init__()
         layout = QVBoxLayout()
         self.setLayout(layout)
-        self.paciente_frame = self.create_paciente_frame()  # Guardar el frame en una variable de instancia
+
+        # Crear botones
+        self.consulta_general_button = QPushButton("Consulta General")
+        self.consulta_pediatrica_button = QPushButton("Consulta Pediátrica")
+        self.consulta_ginecologica_button = QPushButton("Consulta Ginecológica")
+        self.emergencia_button = QPushButton("Emergencia")
+
+        # Conectar botones a sus acciones
+        self.consulta_general_button.clicked.connect(self.show_paciente_frame)
+        self.consulta_pediatrica_button.clicked.connect(self.show_pediatrica_frame)
+        self.consulta_ginecologica_button.clicked.connect(self.show_ginecologica_frame)
+        self.emergencia_button.clicked.connect(self.show_emergencia_frame)
+
+        # Agregar botones al layout
+        layout.addWidget(self.consulta_general_button)
+        layout.addWidget(self.consulta_pediatrica_button)
+        layout.addWidget(self.consulta_ginecologica_button)
+        layout.addWidget(self.emergencia_button)
+
+        # Crear el frame de paciente y agregarlo al layout
+        self.paciente_frame = self.create_paciente_frame()
         layout.addWidget(self.paciente_frame)
-    
+        self.paciente_frame.setVisible(False)  # Ocultar el frame inicialmente
+
     def show_paciente_frame(self):
-        self.paciente_frame.setVisible(True)  # Hacer visible el frame de paciente
+        self.paciente_frame.setVisible(True)
+
+    def show_pediatrica_frame(self):
+        # Aquí puedes agregar la lógica para mostrar el frame de consulta pediátrica
+        QMessageBox.information(self, "Consulta Pediátrica", "Mostrar frame de consulta pediátrica.")
+
+    def show_ginecologica_frame(self):
+        # Aquí puedes agregar la lógica para mostrar el frame de consulta ginecológica
+        QMessageBox.information(self, "Consulta Ginecológica", "Mostrar frame de consulta ginecológica.")
+
+    def show_emergencia_frame(self):
+        # Aquí puedes agregar la lógica para mostrar el frame de emergencia
+        QMessageBox.information(self, "Emergencia", "Mostrar frame de emergencia.")
 
     def create_paciente_frame(self):
         frame = QWidget()
