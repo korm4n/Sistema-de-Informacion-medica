@@ -20,7 +20,7 @@ class CrearBaseDatos:
 
             cursor.execute("SHOW DATABASES LIKE 'sistema_informacion_medica'")
             result = cursor.fetchone()
-            if result:
+            if (result):
                 print("La base de datos 'sistema_informacion_medica' ya existe.")
                 cursor.close()
                 self.connection.close()
@@ -42,7 +42,8 @@ class CrearBaseDatos:
             ''')
 
             cursor.execute('''
-                CREATE TABLE IF NOT EXISTS Medico (
+                CREATE TABLE IF NOT EXISTS MedicoOEnfermero (
+                    tipo ENUM('Medico', 'Enfermero') NOT NULL,
                     cedula VARCHAR(20) PRIMARY KEY,
                     primer_nombre VARCHAR(255) NOT NULL,
                     segundo_nombre VARCHAR(255),
@@ -51,10 +52,12 @@ class CrearBaseDatos:
                     fecha_nacimiento DATE NOT NULL,
                     telefono VARCHAR(20) NOT NULL,
                     direccion VARCHAR(255) NOT NULL,
-                    genero ENUM('Masculino', 'Femenino') NOT NULL,
+                    genero ENUM('Masculino', 'Femenino', 'Otros') NOT NULL,
                     estado_civil ENUM('Soltero', 'Casado', 'Viudo', 'Divorciado') NOT NULL,
                     numero_registro_medico VARCHAR(50) NOT NULL,
-                    horario_guardia TEXT NOT NULL
+                    horario_guardia TEXT NOT NULL,
+                    hospital_id INT,
+                    FOREIGN KEY (hospital_id) REFERENCES Hospital(id)
                 ) ENGINE=InnoDB
             ''')
 
@@ -99,6 +102,7 @@ class CrearBaseDatos:
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS HistoriaClinicaAntecedentesPersonales (
                     id INT AUTO_INCREMENT PRIMARY KEY,
+                    paciente_cedula VARCHAR(20),
                     adenitis TEXT NOT NULL,
                     alergia TEXT NOT NULL,
                     amigdalitis TEXT NOT NULL,
@@ -133,13 +137,15 @@ class CrearBaseDatos:
                     tifoidea TEXT NOT NULL,
                     traumatismos TEXT NOT NULL,
                     vacunaciones TEXT NOT NULL,
-                    otros TEXT NOT NULL
+                    otros TEXT NOT NULL,
+                    FOREIGN KEY (paciente_cedula) REFERENCES Paciente(cedula)
                 ) ENGINE=InnoDB
             ''')
 
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS HistoriaClinicaAntecedentesFamiliares (
                     id INT AUTO_INCREMENT PRIMARY KEY,
+                    paciente_cedula VARCHAR(20),
                     alergia TEXT NOT NULL,
                     artritis TEXT NOT NULL,
                     cancer TEXT NOT NULL,
@@ -190,13 +196,15 @@ class CrearBaseDatos:
                     dolor TEXT NOT NULL,
                     fotofobia TEXT NOT NULL,
                     lagrimeo TEXT NOT NULL,
-                    otros_7_5 TEXT NOT NULL
+                    otros_7_5 TEXT NOT NULL,
+                    FOREIGN KEY (paciente_cedula) REFERENCES Paciente(cedula)
                 ) ENGINE=InnoDB
             ''')
 
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS HistoriaClinicaAntecedentesFamiliares2 (
                     id INT AUTO_INCREMENT PRIMARY KEY,
+                    paciente_cedula VARCHAR(20),
                     dolor_de_oidos TEXT NOT NULL,
                     secreciones TEXT NOT NULL,
                     sordera TEXT NOT NULL,
@@ -252,13 +260,15 @@ class CrearBaseDatos:
                     parasitos TEXT NOT NULL,
                     pirosis TEXT NOT NULL,
                     vomitos TEXT NOT NULL,
-                    otros_15_15 TEXT NOT NULL
+                    otros_15_15 TEXT NOT NULL,
+                    FOREIGN KEY (paciente_cedula) REFERENCES Paciente(cedula)
                 ) ENGINE=InnoDB
             ''')
 
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS HistoriaClinicaAntecedentesFamiliares3 (
                     id INT AUTO_INCREMENT PRIMARY KEY,
+                    paciente_cedula VARCHAR(20),
                     dolor_genitourinario TEXT NOT NULL,
                     enuresis TEXT NOT NULL,
                     hematuria TEXT NOT NULL,
@@ -295,13 +305,15 @@ class CrearBaseDatos:
                     animales TEXT NOT NULL,
                     roedores TEXT NOT NULL,
                     servicios_publicos TEXT NOT NULL,
-                    otros_19_9 TEXT NOT NULL
+                    otros_19_9 TEXT NOT NULL,
+                    FOREIGN KEY (paciente_cedula) REFERENCES Paciente(cedula)
                 ) ENGINE=InnoDB
             ''')
 
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS HistoriaClinicaPersonal (
                     id INT AUTO_INCREMENT PRIMARY KEY,
+                    paciente_cedula VARCHAR(20),
                     color TEXT NOT NULL,
                     humedad TEXT NOT NULL,
                     contextura TEXT NOT NULL,
@@ -476,13 +488,15 @@ class CrearBaseDatos:
                     orientacion TEXT NOT NULL,
                     lenguaje TEXT NOT NULL,
                     coordinacion TEXT NOT NULL,
-                    otros_21_11 TEXT NOT NULL
+                    otros_21_11 TEXT NOT NULL,
+                    FOREIGN KEY (paciente_cedula) REFERENCES Paciente(cedula)
                 ) ENGINE=InnoDB
             ''')
 
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS ConsultaGinecologica (
                     id INT AUTO_INCREMENT PRIMARY KEY,
+                    paciente_cedula VARCHAR(20),
                     G TEXT NOT NULL,
                     P TEXT NOT NULL,
                     A TEXT NOT NULL,
@@ -626,7 +640,71 @@ class CrearBaseDatos:
                     TACTO TEXT NOT NULL,
                     ESPECULO TEXT NOT NULL,
                     EXTREMIDADES TEXT NOT NULL,
-                    NEUROLÓGICO TEXT NOT NULL
+                    NEUROLÓGICO TEXT NOT NULL,
+                    FOREIGN KEY (paciente_cedula) REFERENCES Paciente(cedula)
+                ) ENGINE=InnoDB
+            ''')
+
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS HistoriaClinicaPediatricaExamenFisicoFuncional (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    paciente_cedula VARCHAR(20),
+                    antecedentes_prenatales_y_obstetricos TEXT NOT NULL,
+                    neonatal TEXT NOT NULL,
+                    pan TEXT NOT NULL,
+                    tan TEXT NOT NULL,
+                    alimentacion TEXT NOT NULL,
+                    desarrollo_psicomotor TEXT NOT NULL,
+                    habitos_psicobiologicos TEXT NOT NULL,
+                    inmunizaciones TEXT NOT NULL,
+                    antecedentes_personales TEXT NOT NULL,
+                    antecedentes_epidemiologicos TEXT NOT NULL,
+                    historia_familiar TEXT NOT NULL,
+                    general TEXT NOT NULL,
+                    gastrointestinal TEXT NOT NULL,
+                    genitourinario TEXT NOT NULL,
+                    FOREIGN KEY (paciente_cedula) REFERENCES Paciente(cedula)
+                ) ENGINE=InnoDB
+            ''')
+
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS HistoriaClinicaPediatricaExamenFisicoIngreso (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    paciente_cedula VARCHAR(20),
+                    estado_general TEXT NOT NULL,
+                    piel TEXT NOT NULL,
+                    cabeza TEXT NOT NULL,
+                    ojos TEXT NOT NULL,
+                    oidos TEXT NOT NULL,
+                    rinofaringe TEXT NOT NULL,
+                    boca TEXT NOT NULL,
+                    cuello TEXT NOT NULL,
+                    ganglios_linfaticos TEXT NOT NULL,
+                    torax_y_pulmones TEXT NOT NULL,
+                    corazon_y_venas TEXT NOT NULL,
+                    abdomen TEXT NOT NULL,
+                    urinarios TEXT NOT NULL,
+                    genitales TEXT NOT NULL,
+                    huesos TEXT NOT NULL,
+                    articulaciones TEXT NOT NULL,
+                    neurologico TEXT NOT NULL,
+                    resumen_de_ingreso TEXT NOT NULL,
+                    impresion_diagnostica TEXT NOT NULL,
+                    comentario_de_ingreso TEXT NOT NULL,
+                    antecedentes_prenatales TEXT NOT NULL,
+                    neonatales TEXT NOT NULL,
+                    inmunizacion TEXT NOT NULL,
+                    FOREIGN KEY (paciente_cedula) REFERENCES Paciente(cedula)
+                ) ENGINE=InnoDB
+            ''')
+
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS MedicoPaciente (
+                    medico_cedula VARCHAR(20),
+                    paciente_cedula VARCHAR(20),
+                    PRIMARY KEY (medico_cedula, paciente_cedula),
+                    FOREIGN KEY (medico_cedula) REFERENCES MedicoOEnfermero(cedula),
+                    FOREIGN KEY (paciente_cedula) REFERENCES Paciente(cedula)
                 ) ENGINE=InnoDB
             ''')
 

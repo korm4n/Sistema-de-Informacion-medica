@@ -1,0 +1,33 @@
+digraph {
+	Inicio [label=Inicio]
+	Edad [label="Edad de la madre"]
+	Gestas [label="Número de gestas"]
+	Paras [label="Número de paras"]
+	Cesareas [label="Número de cesáreas"]
+	Abortos [label="Número de abortos"]
+	Controlado [label="¿Embarazo controlado?"]
+	Consultas [label="Número de consultas"]
+	Complicaciones [label="¿Complicaciones? (IV, IU, HTA)"]
+	Trimestre [label="Trimestre de la complicación"]
+	Tratamiento [label="¿Tratamiento recibido?"]
+	CompTrat [label="¿Hubo complicaciones con el tratamiento?"]
+	Semanas [label="Semanas de gestación"]
+	TipoParto [label="Tipo de parto (Eutócico, Distócico, Cesárea)"]
+	TipoCesarea [label="Tipo de cesárea (Segmentaria, Corporal, Anterior)"]
+	Fin [label=Fin]
+	Inicio -> Edad
+	Edad -> Gestas
+	Gestas -> Paras
+	Paras -> Cesareas
+	Cesareas -> Abortos
+	Abortos -> Controlado
+	Controlado -> Consultas
+	Consultas -> Complicaciones
+	Complicaciones -> Trimestre
+	Trimestre -> Tratamiento
+	Tratamiento -> CompTrat
+	CompTrat -> Semanas
+	Semanas -> TipoParto
+	TipoParto -> TipoCesarea
+	TipoCesarea -> Fin
+}

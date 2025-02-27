@@ -1,0 +1,11 @@
+digraph {
+	Inicio [label=Inicio]
+	HabitoMiccionario [label="Madre refiere hábito miccionario presente amarillo claro"]
+	NumeroVeces [label="En número de 4 veces al día, cuantificado por el cambio de pañal"]
+	NiegaEnuresis [label="Niega enuresis"]
+	Fin [label=Fin]
+	Inicio -> HabitoMiccionario
+	HabitoMiccionario -> NumeroVeces
+	NumeroVeces -> NiegaEnuresis
+	NiegaEnuresis -> Fin
+}
